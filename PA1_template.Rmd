@@ -17,6 +17,8 @@ activity$date <- as.POSIXct(activity$date, format="%Y-%m-%d")
 weekday <- weekdays(activity$date)
 activity <- cbind(activity,weekday)
 
+summary(activity)
+
 ```
 
 
@@ -28,6 +30,8 @@ names(activity_total_steps) <- c("date", "steps")
 hist(activity_total_steps$steps, main = "Total number of steps taken per day", xlab = "Total steps taken per day", col = "red", ylim = c(0,20), breaks = seq(0,25000, by=2500))
 
 print(paste("Mean of Total number of steps taken per day: ", mean(activity_total_steps$steps)))
+
+print(paste("Median of Total number of steps taken per day: ", median(activity_total_steps$steps)))
 
 ```
 
@@ -51,6 +55,7 @@ print(paste("Avg. Interval: ", avg_interval))
 ### Imputing missing values
 
 ```{r}
+print(paste("Empty Values: ", sum(is.na(activity$steps))))
 imputed_steps <- average_daily_activity$mean[match(activity$interval, average_daily_activity$interval)]
 
 activity_imputed <- transform(activity, steps = ifelse(is.na(activity$steps), yes = imputed_steps, no = activity$steps))
@@ -58,6 +63,11 @@ total_steps_imputed <- aggregate(steps ~ date, activity_imputed, sum)
 names(total_steps_imputed) <- c("date", "daily_steps")
 
 hist(total_steps_imputed$daily_steps, col = "darkblue", xlab = "Total steps per day", ylim = c(0,30), main = "Total number of steps taken each day", breaks = seq(0,25000,by=2500))
+
+print(paste("Mean of Total number of steps taken per day: ", mean(total_steps_imputed$daily_steps)))
+
+print(paste("Median of Total number of steps taken per day: ", median(total_steps_imputed$daily_steps)))
+
 ```
 
 
